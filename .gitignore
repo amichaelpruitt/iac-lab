@@ -1,0 +1,28 @@
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+!example.tfvars
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+*tfplan*
+.terraformrc
+terraform.rc
+
+# Ansible
+*.retry
+ansible/inventory/hosts.ini
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+.DS_Store
