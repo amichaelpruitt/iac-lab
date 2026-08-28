@@ -164,19 +164,19 @@ and you can prove Docker actually works (not just that the binary exists).
 - [x] Verify: `docker --version`, `terraform --version`,
       `ansible --version` all succeed
 
-### Phase 1 — Terraform: network + containers + inventory handoff
+### Phase 1 — Terraform: network + containers + inventory handoff ✅ done 2026-08-26
 Goal: `terraform apply` produces a running network and three blank
 containers, and generates a valid Ansible inventory file from its outputs.
-- [ ] `ansible.cfg` at repo root: default inventory path, roles path, so
+- [x] `ansible.cfg` at repo root: default inventory path, roles path, so
       later commands don't need `-i ansible/inventory/hosts.ini` by hand
-- [ ] `docker_network` resource for the lab network
-- [ ] Three `docker_container` resources (`lb`, `app1`, `app2`) on that
+- [x] `docker_network` resource for the lab network
+- [x] Three `docker_container` resources (`lb`, `app1`, `app2`) on that
       network, `debian:bookworm-slim` image, `sleep infinity` command
-- [ ] Outputs exposing container names (and anything else the inventory
+- [x] Outputs exposing container names (and anything else the inventory
       needs)
-- [ ] Inventory template (`.tpl`) + `local_file` resource rendering it from
+- [x] Inventory template (`.tpl`) + `local_file` resource rendering it from
       those outputs into `ansible/inventory/hosts.ini`
-- [ ] `terraform validate` and `terraform apply` both succeed; inspect the
+- [x] `terraform validate` and `terraform apply` both succeed; inspect the
       generated inventory file by hand
 
 ### Phase 2 — Ansible: `lb` role (nginx round-robin)
