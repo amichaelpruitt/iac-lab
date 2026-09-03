@@ -16,13 +16,16 @@
   roles:
     - lb
 
-- name: Configure app backends
-  hosts: app
-  gather_facts: false
-  pre_tasks:
-    - name: Bootstrap Python (needed before any other Ansible module can run)
-      ansible.builtin.raw: apt-get update && apt-get install -y python3
-      register: app_bootstrap
-      changed_when: "'0 newly installed' not in app_bootstrap.stdout"
-  roles:
-    - app
+# TODO(austin): the app role does not exist yet -- ansible/roles/app/ is an
+# empty directory, so this play fails syntax-check in CI. Write the Flask
+# backend role, then uncomment this block.
+# - name: Configure app backends
+#   hosts: app
+#   gather_facts: false
+#   pre_tasks:
+#     - name: Bootstrap Python (needed before any other Ansible module can run)
+#       ansible.builtin.raw: apt-get update && apt-get install -y python3
+#       register: app_bootstrap
+#       changed_when: "'0 newly installed' not in app_bootstrap.stdout"
+#   roles:
+#     - app
