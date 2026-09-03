@@ -182,11 +182,19 @@ containers, and generates a valid Ansible inventory file from its outputs.
 ### Phase 2 — Ansible: `lb` role (nginx round-robin)
 Goal: `app1`/`app2` groups in inventory determine the containers nginx
 proxies to — no hardcoded backend list.
-- [ ] Tasks: apt-get update + install nginx
-- [ ] Template: nginx config with an `upstream` block built from the
+
+**Note (2026-09-02):** the tasks/handler/template below were already
+written in a prior session but never actually run or verified — found
+during the Phase 0-1 re-grounding pass. Checking boxes off as they're
+*verified*, not just as files that exist.
+- [x] Tasks: apt-get update + install nginx (`ansible/roles/lb/tasks/main.yml`)
+- [x] Template: nginx config with an `upstream` block built from the
       `app` inventory group (Jinja loop), proxying `/` to it round-robin
-- [ ] Handler: reload/restart nginx on config change
-- [ ] Run against just the `lb` host; verify nginx is listening
+      (`ansible/roles/lb/templates/nginx.conf.j2`)
+- [x] Handler: reload/restart nginx on config change
+      (`ansible/roles/lb/handlers/main.yml`)
+- [ ] Run against just the `lb` host; verify nginx is listening — **not
+      yet done, next concrete step**
 
 ### Phase 3 — Ansible: `app` role (Flask backend)
 Goal: each app node runs a minimal Flask app that identifies itself in its
