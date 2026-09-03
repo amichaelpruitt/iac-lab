@@ -1,0 +1,5 @@
+---
+- name: Reload nginx
+  ansible.builtin.command: nginx -s reload
+  # A reload genuinely changes running state, so reporting "changed" is honest.
+  changed_when: true

@@ -1,0 +1,28 @@
+---
+- name: Update apt package cache
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Install nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+
+- name: Deploy nginx reverse proxy config
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/default
+    mode: "0644"
+  notify: Reload nginx
+
+- name: Check whether nginx is already running
+  ansible.builtin.command: pgrep nginx
+  register: lb_nginx_running
+  failed_when: false
+  changed_when: false
+
+- name: Start nginx
+  ansible.builtin.command: nginx
+  when: lb_nginx_running.rc != 0
+  # Only runs when nginx is not already up, so when it runs it did change state.
+  changed_when: true

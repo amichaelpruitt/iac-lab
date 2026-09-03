@@ -1,0 +1,28 @@
+---
+# gather_facts is off because the automatic "Gathering Facts" task itself
+# needs Python on the target, which does not exist until the pre_task below
+# installs it. Facts get re-enabled per-role if ever needed.
+- name: Configure load balancer
+  hosts: lb
+  gather_facts: false
+  pre_tasks:
+    # raw runs a shell command directly with no Python on the target.
+    # It cannot report changed/unchanged on its own, so changed_when reads
+    # apt's own output instead of blindly claiming a change every run.
+    - name: Bootstrap Python (needed before any other Ansible module can run)
+      ansible.builtin.raw: apt-get update && apt-get install -y python3
+      register: lb_bootstrap
+      changed_when: "'0 newly installed' not in lb_bootstrap.stdout"
+  roles:
+    - lb
+
+- name: Configure app backends
+  hosts: app
+  gather_facts: false
+  pre_tasks:
+    - name: Bootstrap Python (needed before any other Ansible module can run)
+      ansible.builtin.raw: apt-get update && apt-get install -y python3
+      register: app_bootstrap
+      changed_when: "'0 newly installed' not in app_bootstrap.stdout"
+  roles:
+    - app

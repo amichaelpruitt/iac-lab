@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  terraform:
+    name: terraform validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.15.9"
+
+      - name: terraform fmt
+        run: terraform -chdir=terraform fmt -check -recursive
+
+      # -backend=false: validate does not need real provider credentials
+      # or remote state, so init without a backend keeps CI hermetic.
+      - name: terraform init
+        run: terraform -chdir=terraform init -backend=false
+
+      - name: terraform validate
+        run: terraform -chdir=terraform validate
+
+  ansible:
+    name: ansible-lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: install ansible tooling
+        run: pip install --disable-pip-version-check ansible-core ansible-lint
+
+      - name: ansible-lint
+        run: ansible-lint
